@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -45,13 +46,6 @@ class ClientController extends Controller
             'cnpj'     => ['nullable', 'digits:14', 'unique:clients,cnpj'],
         ]);
 
-        // dd(
-        //     $request->all(),
-        //     $request->only(['name', 'lastname', 'email', 'cpf', 'cnpj']),
-        //     $validated
-        // );
-
-        // $client = Client::create($request->only(['name', 'lastname', 'email', 'cpf', 'cnpj']));
         $client = Client::create($validated);
 
         return redirect()->route('clients.show', $client);
@@ -76,7 +70,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        return view('clients.edit',['client'=> $client]);
+        return view('clients.edit', ['client'=> $client]);
     }
 
     /**
@@ -88,7 +82,17 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        return redirect('clients');
+        $validated = $request->validate([
+            'name'     => ['required'],
+            'lastname' => ['required'],
+            'email'    => ['required', 'email', Rule::unique('clients')->ignore($client->id)],
+            'cpf'      => ['nullable', 'digits:11', Rule::unique('clients')->ignore($client->id)],
+            'cnpj'     => ['nullable', 'digits:14', Rule::unique('clients')->ignore($client->id)],
+        ]);
+
+        $client->update($validated);
+
+        return redirect()->route('clients.show', $client);
     }
 
     /**

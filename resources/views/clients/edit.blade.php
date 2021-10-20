@@ -11,8 +11,40 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <a href="{{ route('clients.show', $client)}}">Voltar</a>
 
-                    <form>
-                        {{-- TODO --}}
+                    @if ($errors->any())
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+
+                    <form action="{{ route('clients.update', $client) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div>
+                            <label>Nome</label>
+                            <input type="text" name="name" value="{{ $client->name }}">
+                        </div>
+                        <div>
+                            <label>Sobrenome</label>
+                            <input type="text" name="lastname" value="{{ $client->lastname }}">
+                        </div>
+                        <div>
+                            <label>Email</label>
+                            <input type="email" name="email" value="{{ $client->email }}">
+                        </div>
+                        <div>
+                            <label>CPF</label>
+                            <input type="text" name="cpf" value="{{ $client->cpf }}">
+                        </div>
+                        <div>
+                            <label>CNPJ</label>
+                            <input type="text" name="cnpj" value="{{ $client->cnpj }}">
+                        </div>
+
+                        <button type="submit">Atualizar cliente</button>
                     </form>
                 </div>
             </div>
