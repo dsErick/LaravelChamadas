@@ -19,7 +19,7 @@
                         </ul>
                     @endif
 
-                    <form action="{{ route('clients.update', $client) }}" method="POST">
+                    <form action="{{ route('clients.update', $client) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -42,6 +42,10 @@
                         <div>
                             <label>CNPJ</label>
                             <input type="text" name="cnpj" value="{{ $client->cnpj }}">
+                        </div>
+                        <div>
+                            <label>Logo</label>
+                            <input type="file" name="logo">
                         </div>
 
                         <button type="submit">Atualizar cliente</button>

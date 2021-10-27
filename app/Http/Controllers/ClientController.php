@@ -82,13 +82,20 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+        // dd($request->all(), $request->file(), $request->file('logo'));
+
         $validated = $request->validate([
             'name'     => ['required'],
             'lastname' => ['required'],
             'email'    => ['required', 'email', Rule::unique('clients')->ignore($client->id)],
             'cpf'      => ['nullable', 'digits:11', Rule::unique('clients')->ignore($client->id)],
             'cnpj'     => ['nullable', 'digits:14', Rule::unique('clients')->ignore($client->id)],
+            'logo'     => ['nullable', 'image'],
         ]);
+
+        if ($request->hasFile('logo')) {
+            $request->file('logo')->storePublicly('clients', 'public');
+        }
 
         $client->update($validated);
 
