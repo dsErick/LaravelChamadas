@@ -103,13 +103,8 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        return redirect('clients');
+        $client->delete();
+
+        return redirect()->route('clients.index');
     }
-
-    // public function report(Request $request)
-    // {
-    //     // dd($request, $request->all());
-
-    //     return 'Gerar relatório: ' . $request->input('q', 'Vazio');
-    // }
 }
